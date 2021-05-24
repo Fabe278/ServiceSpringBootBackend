@@ -1,0 +1,3 @@
+INSERT INTO services (id, name, date, longitude, latitude, employee_id) VALUES (1, 'Service 1', '13.04.2020 13:34', '45.345', '47.345', 1)
+INSERT INTO services (id, name, date, longitude, latitude, employee_id) VALUES (2, 'Service 2', '23.06.2018 13:34', '45.375', '43.345', 1)
+INSERT INTO services (id, name, date, longitude, latitude, employee_id) VALUES (3, 'Service 3', '23.06.2018 13:34', '45.2456', '43.3565', 2)
