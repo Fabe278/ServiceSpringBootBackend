@@ -1,9 +1,6 @@
 package at.fhainzinger.services;
 
-import at.fhainzinger.data.Service;
-import at.fhainzinger.data.ServiceDto;
-import at.fhainzinger.data.ServiceEntity;
-import at.fhainzinger.data.ServiceResource;
+import at.fhainzinger.data.*;
 import at.fhainzinger.database.ServiceRepository;
 import at.fhainzinger.exceptions.ServiceMSBadRequestException;
 import at.fhainzinger.exceptions.ServiceMSResourceNotFoundException;
@@ -21,6 +18,9 @@ import java.util.stream.Collectors;
 public class ServiceDataService {
     @Autowired
     private ServiceRepository serviceRepository;
+
+    @Autowired
+    private LocationIQDataService locationIQDataService;
 
     public List<ServiceResource> getServiceResources() {
         List<ServiceResource> result = new ArrayList<>();
@@ -45,8 +45,9 @@ public class ServiceDataService {
         service.setName(serviceDto.getName());
         service.setDate(serviceDto.getDate());
         service.setEmployeeId(serviceDto.getEmployeeId());
-        service.setLatitude(serviceDto.getAddress().split(";")[0]);
-        service.setLongitude(serviceDto.getAddress().split(";")[1]);
+        LongitudeLatitude longitudeLatitude = locationIQDataService.getLongitudeLatitudeByAddress(serviceDto.getAddress());
+        service.setLatitude(longitudeLatitude.getLatitude());
+        service.setLongitude(longitudeLatitude.getLongitude());
 
         ServiceEntity storedEntity = this.serviceRepository.save(service.convertToServiceEntity());
 
@@ -86,8 +87,9 @@ public class ServiceDataService {
         serviceToChange.setDate(serviceDto.getDate());
         serviceToChange.setName(serviceDto.getName());
         serviceToChange.setEmployeeId(serviceDto.getEmployeeId());
-        serviceToChange.setLatitude(serviceDto.getAddress().split(";")[0]);
-        serviceToChange.setLongitude(serviceDto.getAddress().split(";")[1]);
+        LongitudeLatitude longitudeLatitude = locationIQDataService.getLongitudeLatitudeByAddress(serviceDto.getAddress());
+        serviceToChange.setLatitude(longitudeLatitude.getLatitude());
+        serviceToChange.setLongitude(longitudeLatitude.getLongitude());
         ServiceEntity changedEntity = serviceRepository.save(serviceToChange.convertToServiceEntity());
         return changedEntity.convertToService().convertToServiceResource();
     }

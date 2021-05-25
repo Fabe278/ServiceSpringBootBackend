@@ -46,5 +46,4 @@ public class ServiceRESTController {
     public List<ServiceResource> getServicesByEmployeeId(@PathVariable int employeeId){
         return serviceDataService.getServicesByEmployeeId(employeeId);
     }
-
 }
