@@ -2,8 +2,8 @@ package at.fhainzinger.services;
 
 import at.fhainzinger.data.*;
 import at.fhainzinger.database.ServiceRepository;
-import at.fhainzinger.exceptions.ServiceMSBadRequestException;
-import at.fhainzinger.exceptions.ServiceMSResourceNotFoundException;
+import at.fhainzinger.exceptions.services.ServiceMSBadRequestException;
+import at.fhainzinger.exceptions.services.ServiceMSResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
