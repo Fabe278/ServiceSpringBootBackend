@@ -71,19 +71,6 @@ public class ServiceDataService {
             throw new ServiceMSBadRequestException("The param address is not valid. Length must be > 5");
     }
 
-    private void checkWithLongLatService(ServiceWithLongLatDto serviceDto){
-        if(serviceDto.getName().length() <= 4)
-            throw new ServiceMSBadRequestException("The param name is not valid. Length must be > 4");
-        if(isNullOrEmpty(serviceDto.getName()))
-            throw new ServiceMSBadRequestException("The param name is not valid");
-        if(isNullOrEmpty(serviceDto.getDate()))
-            throw new ServiceMSBadRequestException("The param date is not valid");
-        if(isNullOrEmpty(serviceDto.getLongitude()))
-            throw new ServiceMSBadRequestException("The param longitude is not valid");
-        if(isNullOrEmpty(serviceDto.getLatitude()))
-            throw new ServiceMSBadRequestException("The param latitude is not valid");
-    }
-
     public ServiceResource getService(int serviceId) {
         Optional<ServiceEntity> foundService = serviceRepository.findById(serviceId);
         if(!foundService.isPresent())
@@ -91,19 +78,20 @@ public class ServiceDataService {
         return foundService.get().convertToService().convertToServiceResource();
     }
 
-    public ServiceResource editService(int serviceId, ServiceWithLongLatDto serviceDto) {
+    public ServiceResource editService(int serviceId, ServiceDto serviceDto) {
         Optional<ServiceEntity> foundService = serviceRepository.findById(serviceId);
         if(!foundService.isPresent())
             throw new ServiceMSResourceNotFoundException(String.format("The service with the id %d does not exist!", serviceId));
         Service serviceToChange = foundService.get().convertToService();
 
-        checkWithLongLatService(serviceDto);
+        checkService(serviceDto);
 
         serviceToChange.setDate(serviceDto.getDate());
         serviceToChange.setName(serviceDto.getName());
         serviceToChange.setEmployeeId(serviceDto.getEmployeeId());
-        serviceToChange.setLatitude(serviceDto.getLatitude());
-        serviceToChange.setLongitude(serviceDto.getLongitude());
+        LongitudeLatitude longitudeLatitude = locationIQDataService.getLongitudeLatitudeByAddress(serviceDto.getAddress());
+        serviceToChange.setLatitude(longitudeLatitude.getLatitude());
+        serviceToChange.setLongitude(longitudeLatitude.getLongitude());
         ServiceEntity changedEntity = serviceRepository.save(serviceToChange.convertToServiceEntity());
         return changedEntity.convertToService().convertToServiceResource();
     }
