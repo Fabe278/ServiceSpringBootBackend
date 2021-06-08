@@ -2,6 +2,7 @@ package at.fhainzinger.controller;
 
 import at.fhainzinger.data.ServiceDto;
 import at.fhainzinger.data.ServiceResource;
+import at.fhainzinger.data.ServiceWithLongLatDto;
 import at.fhainzinger.services.ServiceDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -33,7 +34,7 @@ public class ServiceRESTController {
     }
 
     @RequestMapping(value ="/{serviceId}", method = RequestMethod.PUT)
-    public ServiceResource editService(@PathVariable int serviceId, @RequestBody ServiceDto serviceDto){
+    public ServiceResource editService(@PathVariable int serviceId, @RequestBody ServiceWithLongLatDto serviceDto){
         return serviceDataService.editService(serviceId, serviceDto);
     }
 
